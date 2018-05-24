@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>ideaBox</title>
@@ -11,18 +11,18 @@
 <body>
     <section class="container box">
         <article class="top-box">
-            <form>
-                <h1 class="idea">idea</h1>
-                <h1 class="box">Box</h1>
-                <input id="title-input" type="text" placeholder="Title"><br />
-                <input id="body-input" type="text" placeholder="Body"><br />  
-                <button class="save-btn">save</button><br />
+            <h1 class="idea">idea</h1>
+            <h1 class="box">Box</h1>
+            <form id="todo-form">
+                <input id="title-input" type="text" aria-label="title input" placeholder="Title">
+                <input id="body-input" type="text" aria-label="body input" placeholder="Body">
+                <button class="save-btn">save</button>
             </form>
         </article>
-        
+
         <input id="search-input" type="text" placeholder="Search">
 
-        <article class="bottom-box"> </article>
+        <article class="bottom-box"></article>
 
     </section>
 
