@@ -1,4 +1,7 @@
 $(document).ready(function(){
+// ===================================================================
+// VARIABLES
+// ===================================================================    
 var titleInput = $('#title-input');
 var bodyInput = $('#body-input');
 var numCards = 0;
@@ -8,6 +11,10 @@ var objects = JSON.parse(localStorage.getItem('objects')) || [];
 
 renderAllObjects();
 
+
+// ===================================================================
+// EVENT LISTENERS
+// ===================================================================
 $('#todo-form').submit(function (event) {
     event.preventDefault();
     if ($('#title-input').val() === "" || $('#body-input').val() === "") {
@@ -28,13 +35,19 @@ $('#todo-form').submit(function (event) {
     this.reset();
 });
 
+
+$('.bottom-box').on('click', deleteCard);
+
+
+// ===================================================================
+// FUNCTIONS
+// ===================================================================
+
 function renderAllObjects(){
     objects.forEach(function(object){
         $(".bottom-box").prepend(newCardHTML(object));
     })
 }
-
-
 
 function newCardHTML(todoObject) {
     return '<div id="' + todoObject.id + '"class="card-container"><h2 class="title-of-card">'
@@ -48,6 +61,16 @@ function newCardHTML(todoObject) {
         + '<hr>'
         + '</div>';
 };
+
+function deleteCard(event){
+    if (event.target.className === "delete-button") {
+        var cardHTML = $(event.target).closest('.card-container').remove();
+        console.log(cardHTML);
+        // var cardHTMLId = cardHTML[0].id;
+        // localStorage.removeItem(cardHTMLId);
+    }
+}
+
 
 $(".bottom-box").on('click', function (event) {
     var currentQuality = $($(event.target).siblings('p.quality').children()[0]).text().trim();
@@ -89,33 +112,23 @@ $(".bottom-box").on('click', function (event) {
         localStorage.setItem(cardHTMLId, newCardJSON);
     }
 
-    else if (event.target.className === "delete-button") {
-        var cardHTML = $(event.target).closest('.card-container').remove();
-        var cardHTMLId = cardHTML[0].id;
-        localStorage.removeItem(cardHTMLId);
-    }
 });
-
-
-
-
-
-
-
 
 }) //close document ready
 
 
+// ===================================================================
+// GRAVEYARD
+// ===================================================================
 
 
-
-    // function displayLocalStorage() {
-    //     for (var i = 0; i < localStorage.length; i++){
-    //         var key = localStorage.key(i);
-    //         var localStorageItem = JSON.parse(localStorage.getItem(key));
-    //         $(".bottom-box").prepend(newCardHTML(localStorageItem));
-    //     }
-    // }
+// function displayLocalStorage() {
+//     for (var i = 0; i < localStorage.length; i++){
+//         var key = localStorage.key(i);
+//         var localStorageItem = JSON.parse(localStorage.getItem(key));
+//         $(".bottom-box").prepend(newCardHTML(localStorageItem));
+//     }
+// }
 
 
 
