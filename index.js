@@ -1,25 +1,53 @@
+$(document).ready(function(){
+// ===================================================================
+// VARIABLES
+// ===================================================================    
 var titleInput = $('#title-input');
 var bodyInput = $('#body-input');
 var numCards = 0;
 var qualityVariable = "swill";
 
+var objects = JSON.parse(localStorage.getItem('objects')) || [];
+
+renderAllObjects();
+
+
+// ===================================================================
+// EVENT LISTENERS
+// ===================================================================
 $('#todo-form').submit(function (event) {
     event.preventDefault();
     if ($('#title-input').val() === "" || $('#body-input').val() === "") {
         alert('Missing some inputs!');
         return;
     };
-    var todo = {
+    var object = {
         id: numCards,
         title: titleInput.val(),
         body: bodyInput.val(),
         quality: 'swill'
     }
+    objects.push(object);
     numCards++;
-    $(".bottom-box").prepend(newCardHTML(todo));
-    localStorage.setItem('todo' + numCards, JSON.stringify(todo));
+    $(".bottom-box").prepend(newCardHTML(object));
+    console.log(objects);
+    localStorage.setItem("objects", JSON.stringify(objects));
     this.reset();
 });
+
+
+$('.bottom-box').on('click', deleteCard);
+
+
+// ===================================================================
+// FUNCTIONS
+// ===================================================================
+
+function renderAllObjects(){
+    objects.forEach(function(object){
+        $(".bottom-box").prepend(newCardHTML(object));
+    })
+}
 
 function newCardHTML(todoObject) {
     return '<div id="' + todoObject.id + '"class="card-container"><h2 class="title-of-card">'
@@ -34,32 +62,14 @@ function newCardHTML(todoObject) {
         + '</div>';
 };
 
-
-
-
-
-// function localStoreCard(todoObject) {
-//     var cardString = JSON.stringify(todoObject);
-//     localStorage.setItem('card', cardString);
-// }
-
-// function cardObject() {
-//     return {
-//         title: $('#title-input').val(),
-//         body: $('#body-input').val(),
-//         quality: qualityVariable
-//     };
-// }
-
-
-// $.each(localStorage, function (key) {
-//     var cardData = JSON.parse(this);
-//     numCards++;
-//     $(".bottom-box").prepend(newCardHTML(key, cardData.title, cardData.body, cardData.quality));
-// });
-
-
-
+function deleteCard(event){
+    if (event.target.className === "delete-button") {
+        var cardHTML = $(event.target).closest('.card-container').remove();
+        console.log(cardHTML);
+        // var cardHTMLId = cardHTML[0].id;
+        // localStorage.removeItem(cardHTMLId);
+    }
+}
 
 
 $(".bottom-box").on('click', function (event) {
@@ -102,20 +112,44 @@ $(".bottom-box").on('click', function (event) {
         localStorage.setItem(cardHTMLId, newCardJSON);
     }
 
-    else if (event.target.className === "delete-button") {
-        var cardHTML = $(event.target).closest('.card-container').remove();
-        var cardHTMLId = cardHTML[0].id;
-        localStorage.removeItem(cardHTMLId);
-    }
 });
 
+}) //close document ready
+
+
+// ===================================================================
+// GRAVEYARD
+// ===================================================================
+
+
+// function displayLocalStorage() {
+//     for (var i = 0; i < localStorage.length; i++){
+//         var key = localStorage.key(i);
+//         var localStorageItem = JSON.parse(localStorage.getItem(key));
+//         $(".bottom-box").prepend(newCardHTML(localStorageItem));
+//     }
+// }
 
 
 
 
 
+// function localStoreCard(todoObject) {
+//     var cardString = JSON.stringify(todoObject);
+//     localStorage.setItem('card', cardString);
+// }
+
+// function cardObject() {
+//     return {
+//         title: $('#title-input').val(),
+//         body: $('#body-input').val(),
+//         quality: qualityVariable
+//     };
+// }
 
 
-
-
-
+// $.each(localStorage, function (key) {
+//     var cardData = JSON.parse(this);
+//     numCards++;
+//     $(".bottom-box").prepend(newCardHTML(key, cardData.title, cardData.body, cardData.quality));
+// });
