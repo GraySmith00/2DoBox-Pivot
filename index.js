@@ -6,12 +6,12 @@ $(document).ready(function () {
     var bodyInput = $('#body-input');
     var numCards = 0;
     // var qualityVariable = "swill";
-
+    
     var objects = JSON.parse(localStorage.getItem('objects')) || [];
-
+    
     renderAllObjects();
-
-
+    
+    
     // ===================================================================
     // EVENT LISTENERS
     // ===================================================================
@@ -20,22 +20,29 @@ $(document).ready(function () {
         if ($('#title-input').val() === "" || $('#body-input').val() === "") {
             alert('Missing some inputs!');
             return;
-        };
+        };    
         var object = {
             id: numCards,
             title: titleInput.val(),
             body: bodyInput.val(),
             quality: 'swill'
-        }
+        }    
         objects.push(object);
         numCards++;
         $(".bottom-box").prepend(newCardHTML(object, objects.length - 1));
         localStorage.setItem("objects", JSON.stringify(objects));
         this.reset();
-    });
-
-
+    });    
+    
     $('.bottom-box').on('click', '.delete-button', deleteCard);
+    $(".bottom-box").on('click', upVote);
+    $(".bottom-box").on('click', downVote);
+    $('.bottom-box').on('click', 'p', getContentEditIndex);
+    $('.bottom-box').on('keydown', function(e){
+        if (e.keycode === 13){
+            saveBodyEdit(e);
+        }
+    })
 
 
     // ===================================================================
@@ -46,21 +53,21 @@ $(document).ready(function () {
         $('.bottom-box').html('');
         objects.forEach(function (object, i) {
             $(".bottom-box").prepend(newCardHTML(object, i));
-        })
-    }
+        })    
+    }    
 
     function newCardHTML(todoObject, i) {
-        return '<div data-index="' + i + '"class="card-container"><h2 class="title-of-card">'
+        return '<div data-index="' + i + '"class="card-container"><h2 class="title-of-card" contenteditable="true">'
             + todoObject.title + '</h2>'
             + '<button class="delete-button"></button>'
-            + '<p class="body-of-card">'
+            + '<p class="body-of-card" contenteditable="true">'
             + todoObject.body + '</p>'
             + '<button class="upvote"></button>'
             + '<button class="downvote"></button>'
             + '<p class="quality">' + 'quality:' + '<span class="qualityVariable">' + todoObject.quality + '</span>' + '</p>'
             + '<hr>'
             + '</div>';
-    };
+    };        
 
     function deleteCard(e) {
         var index = e.target.parentElement.dataset.index;
@@ -71,12 +78,9 @@ $(document).ready(function () {
         //var cardHTML = $(e.target).closest('.card-container').remove();
         // var cardHTMLId = cardHTML[0].id;
         // localStorage.removeItem(cardHTMLId);
-    }
+    }    
 
 
-
-    $(".bottom-box").on('click', upVote);
-    $(".bottom-box").on('click', downVote);
 
 
 
@@ -113,8 +117,20 @@ $(document).ready(function () {
     }
 
 
+    var contentEditIndex;
 
+    function getContentEditIndex() {
+        contentEditIndex = e.target.parentElement.dataset.index;
+    }
 
+    function saveBodyEdit(e) {
+        var contentEditIndex = e.target.parentElement.dataset.index;
+        if (objects[index].body !== $(this).text()){
+            objects[index].body = $(this).text();
+        } 
+    }
+
+        
 
 
     // $(".bottom-box").on('click', function (event) {
