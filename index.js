@@ -26,7 +26,8 @@ $(document).ready(function() {
       id: numCards,
       title: $('#title-input').val(),
       body: $('#body-input').val(),
-      quality: 'swill'
+      quality: 'swill',
+      completed: false
     };
     objects.push(object);
     numCards++;
@@ -52,6 +53,8 @@ $(document).ready(function() {
   $('.bottom-box').on('focusout', saveBodyEdit);
 
   $('#search-input').on('keyup', search);
+
+  $('.bottom-box').on('click', completed);
 
   // ===================================================================
   // FUNCTIONS
@@ -83,27 +86,20 @@ $(document).ready(function() {
   }
 
   function newCardHTML(todoObject, i) {
-    return (
-      '<div data-index="' +
-      i +
-      '"class="card-container"><h2 contenteditable="true" class="title-of-card">' +
-      todoObject.title +
-      '</h2>' +
-      '<button class="delete-button"></button>' +
-      '<p contenteditable="true" class="body-of-card">' +
-      todoObject.body +
-      '</p>' +
-      '<button class="upvote"></button>' +
-      '<button class="downvote"></button>' +
-      '<p class="quality">' +
-      'quality:' +
-      '<span class="qualityVariable">' +
-      todoObject.quality +
-      '</span>' +
-      '</p>' +
-      '<hr>' +
-      '</div>'
-    );
+    return `<div data-index="${i}" class="card-container ${todoObject.completed ? 'completed display-none' : ''}">
+        <h2 contenteditable="true" class="title-of-card">${
+          todoObject.title
+        }</h2>
+        <button class="delete-button"></button>
+        <p contenteditable="true" class="body-of-card">${todoObject.body}</p>
+        <button class="upvote"></button>
+        <button class="downvote"></button>
+        <p class="quality">quality: <span class="qualityVariable">${
+          todoObject.quality
+        }</span></p>
+        <button class="completed-button">Completed</button>
+        <hr>
+      </div>`;
   }
 
   function upVote(e) {
@@ -194,6 +190,20 @@ $(document).ready(function() {
       );
     });
     renderAllObjects(searchMatches);
+  }
+
+  function completed(e) {
+    if (e.target.className === 'completed-button') {
+      var index = e.target.parentElement.dataset.index;
+      var object = objects[index];
+      object.completed = !object.completed;
+      localStorage.setItem('objects', JSON.stringify(objects));
+      if (object.completed) {
+        e.target.parentElement.classList.add('completed');
+      } else {
+        e.target.parentElement.classList.remove('completed');
+      }
+    }
   }
 }); //close document ready
 
