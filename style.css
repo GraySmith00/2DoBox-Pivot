@@ -63,6 +63,14 @@ h1{
     width: 45.5%;
 }
 
+.save-btn:disabled {
+    background-color: rgb(191, 255, 251); 
+}
+
+.save-btn:disabled:hover {
+    background-color: rgb(191, 255, 251); 
+}
+
 .save-btn:hover {
     background-color: #045e55;
 }
