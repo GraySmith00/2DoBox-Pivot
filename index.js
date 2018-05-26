@@ -14,8 +14,8 @@ $(document).ready(function() {
   // ===================================================================
   $('#todo-form').submit(function(event) {
     event.preventDefault();
-    if ($('#title-input').val() === '' || $('#body-input').val() === '') {
-      alert('Missing some inputs!');
+    if ($('#title-input').val() === '') {
+      alert('Missing a title!');
       return;
     }
     if ($('#body-input').val() === '') {
