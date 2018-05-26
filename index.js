@@ -6,12 +6,12 @@ $(document).ready(function () {
     var bodyInput = $('#body-input');
     var numCards = 0;
     // var qualityVariable = "swill";
-    
+
     var objects = JSON.parse(localStorage.getItem('objects')) || [];
-    
+
     renderAllObjects();
-    
-    
+
+
     // ===================================================================
     // EVENT LISTENERS
     // ===================================================================
@@ -20,29 +20,31 @@ $(document).ready(function () {
         if ($('#title-input').val() === "" || $('#body-input').val() === "") {
             alert('Missing some inputs!');
             return;
-        };    
+        };
         var object = {
             id: numCards,
             title: titleInput.val(),
             body: bodyInput.val(),
             quality: 'swill'
-        }    
+        }
         objects.push(object);
         numCards++;
         $(".bottom-box").prepend(newCardHTML(object, objects.length - 1));
         localStorage.setItem("objects", JSON.stringify(objects));
         this.reset();
-    });    
-    
+    });
+
     $('.bottom-box').on('click', '.delete-button', deleteCard);
     $(".bottom-box").on('click', upVote);
     $(".bottom-box").on('click', downVote);
     $('.bottom-box').on('click', 'p', getContentEditIndex);
-    $('.bottom-box').on('keydown', function(e){
-        if (e.keycode === 13){
-            saveBodyEdit(e);
+    $('.bottom-box').on('keydown', function (e) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            saveBodyEdit(e)
         }
-    })
+    });
+    $('.bottom-box').on('focusout', saveBodyEdit);
 
 
     // ===================================================================
@@ -53,21 +55,21 @@ $(document).ready(function () {
         $('.bottom-box').html('');
         objects.forEach(function (object, i) {
             $(".bottom-box").prepend(newCardHTML(object, i));
-        })    
-    }    
+        })
+    }
 
     function newCardHTML(todoObject, i) {
-        return '<div data-index="' + i + '"class="card-container"><h2 class="title-of-card" contenteditable="true">'
+        return '<div data-index="' + i + '"class="card-container"><h2 contenteditable="true" class="title-of-card">'
             + todoObject.title + '</h2>'
             + '<button class="delete-button"></button>'
-            + '<p class="body-of-card" contenteditable="true">'
+            + '<p contenteditable="true" class="body-of-card">'
             + todoObject.body + '</p>'
             + '<button class="upvote"></button>'
             + '<button class="downvote"></button>'
             + '<p class="quality">' + 'quality:' + '<span class="qualityVariable">' + todoObject.quality + '</span>' + '</p>'
             + '<hr>'
             + '</div>';
-    };        
+    };
 
     function deleteCard(e) {
         var index = e.target.parentElement.dataset.index;
@@ -78,40 +80,36 @@ $(document).ready(function () {
         //var cardHTML = $(e.target).closest('.card-container').remove();
         // var cardHTMLId = cardHTML[0].id;
         // localStorage.removeItem(cardHTMLId);
-    }    
+    }
 
-
-
-
-
-    function upVote(e){
+    function upVote(e) {
         var currentQuality = $($(event.target).siblings('p.quality').children()[0]).text().trim();
         var index = e.target.parentElement.dataset.index;
-        if(e.target.className === "upvote") {
-            if (currentQuality ==="swill"){
+        if (e.target.className === "upvote") {
+            if (currentQuality === "swill") {
                 objects[index].quality = "plausible";
                 localStorage.setItem("objects", JSON.stringify(objects));
                 $($(event.target).siblings('p.quality').children()[0]).text('plausible');
             } else if (currentQuality === "plausible") {
-                objects[index].quality = "genius" ;
+                objects[index].quality = "genius";
                 localStorage.setItem("objects", JSON.stringify(objects));
-                $($(event.target).siblings('p.quality').children()[0]).text('genius');  
+                $($(event.target).siblings('p.quality').children()[0]).text('genius');
             }
         }
     }
 
-    function downVote(e){
+    function downVote(e) {
         var currentQuality = $($(event.target).siblings('p.quality').children()[0]).text().trim();
         var index = e.target.parentElement.dataset.index;
-        if(e.target.className === "downvote") {
-            if (currentQuality === "plausible"){
+        if (e.target.className === "downvote") {
+            if (currentQuality === "plausible") {
                 objects[index].quality = "swill";
                 localStorage.setItem('objects', JSON.stringify(objects));
-                $($(event.target).siblings('p.quality').children()[0]).text('swill');  
-            }  else if (currentQuality === "genius"){
+                $($(event.target).siblings('p.quality').children()[0]).text('swill');
+            } else if (currentQuality === "genius") {
                 objects[index].quality = "plausible";
                 localStorage.setItem('objects', JSON.stringify(objects));
-                $($(event.target).siblings('p.quality').children()[0]).text('plausible');  
+                $($(event.target).siblings('p.quality').children()[0]).text('plausible');
             }
         }
     }
@@ -119,18 +117,18 @@ $(document).ready(function () {
 
     var contentEditIndex;
 
-    function getContentEditIndex() {
+    function getContentEditIndex(e) {
         contentEditIndex = e.target.parentElement.dataset.index;
     }
 
     function saveBodyEdit(e) {
-        var contentEditIndex = e.target.parentElement.dataset.index;
-        if (objects[index].body !== $(this).text()){
-            objects[index].body = $(this).text();
-        } 
+        if (objects[contentEditIndex].body !== e.target.innerText) {
+            objects[contentEditIndex].body = e.target.innerText;
+            localStorage.setItem('objects', JSON.stringify(objects));
+        }
     }
 
-        
+
 
 
     // $(".bottom-box").on('click', function (event) {
@@ -162,15 +160,15 @@ $(document).ready(function () {
     //             qualityVariable = "genius";
     //         }
 
-            // var cardHTML = $(event.target).closest('.card-container');
-            // var cardHTMLId = cardHTML[0].id;
-            // var cardObjectInJSON = localStorage.getItem(cardHTMLId);
-            // var cardObjectInJS = JSON.parse(cardObjectInJSON);
+    // var cardHTML = $(event.target).closest('.card-container');
+    // var cardHTMLId = cardHTML[0].id;
+    // var cardObjectInJSON = localStorage.getItem(cardHTMLId);
+    // var cardObjectInJS = JSON.parse(cardObjectInJSON);
 
-            // cardObjectInJS.quality = qualityVariable;
+    // cardObjectInJS.quality = qualityVariable;
 
-            // var newCardJSON = JSON.stringify(cardObjectInJS);
-            // localStorage.setItem(cardHTMLId, newCardJSON);
+    // var newCardJSON = JSON.stringify(cardObjectInJS);
+    // localStorage.setItem(cardHTMLId, newCardJSON);
     //     }
 
     // });
