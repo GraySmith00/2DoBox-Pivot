@@ -37,7 +37,7 @@ $(document).ready(function () {
     $('.bottom-box').on('click', '.delete-button', deleteCard);
     $(".bottom-box").on('click', upVote);
     $(".bottom-box").on('click', downVote);
-    $('.bottom-box').on('click', 'p', getContentEditIndex);
+    $('.bottom-box').on('click', getContentEditIndex);
     $('.bottom-box').on('keydown', function (e) {
         if (e.keyCode === 13) {
             e.preventDefault();
@@ -114,7 +114,6 @@ $(document).ready(function () {
         }
     }
 
-
     var contentEditIndex;
 
     function getContentEditIndex(e) {
@@ -122,14 +121,19 @@ $(document).ready(function () {
     }
 
     function saveBodyEdit(e) {
-        if (objects[contentEditIndex].body !== e.target.innerText) {
-            objects[contentEditIndex].body = e.target.innerText;
-            localStorage.setItem('objects', JSON.stringify(objects));
+        if (e.target.nodeName === 'P') {
+            if (objects[contentEditIndex].body !== e.target.innerText) {
+                objects[contentEditIndex].body = e.target.innerText;
+                localStorage.setItem('objects', JSON.stringify(objects));
+            }
+        } else if (e.target.nodeName === 'H2') {
+            if (objects[contentEditIndex].title !== e.target.innerText) {
+                objects[contentEditIndex].title = e.target.innerText;
+                localStorage.setItem('objects', JSON.stringify(objects));
+            }
         }
+
     }
-
-
-
 
     // $(".bottom-box").on('click', function (event) {
     //     var currentQuality = $($(event.target).siblings('p.quality').children()[0]).text().trim();
