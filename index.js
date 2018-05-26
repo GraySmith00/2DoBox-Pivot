@@ -17,10 +17,14 @@ $(document).ready(function () {
     // ===================================================================
     $('#todo-form').submit(function (event) {
         event.preventDefault();
-        if ($('#title-input').val() === "" || $('#body-input').val() === "") {
-            alert('Missing some inputs!');
+        if ($('#title-input').val() === "") {
+            alert('Missing a title!');
             return;
-        };
+        }
+        if ($('#body-input').val() === "") {
+            alert('Missing a body!');
+            return;
+        }
         var object = {
             id: numCards,
             title: titleInput.val(),
@@ -33,6 +37,9 @@ $(document).ready(function () {
         localStorage.setItem("objects", JSON.stringify(objects));
         this.reset();
     });
+
+    $('#title-input').on('keyup', buttonDisabled);
+    $('#body-input').on('keyup', buttonDisabled);
 
     $('.bottom-box').on('click', '.delete-button', deleteCard);
     $(".bottom-box").on('click', upVote);
@@ -50,6 +57,14 @@ $(document).ready(function () {
     // ===================================================================
     // FUNCTIONS
     // ===================================================================
+    function buttonDisabled() {
+        if ($('#title-input').val() !== "" || $('#body-input').val() !== "") {
+            $('.save-btn').prop('disabled', false);
+        } else {
+            $('.save-btn').prop('disabled', true);
+        };
+
+    }
 
     function renderAllObjects() {
         $('.bottom-box').html('');
@@ -132,7 +147,6 @@ $(document).ready(function () {
                 localStorage.setItem('objects', JSON.stringify(objects));
             }
         }
-
     }
 
     // $(".bottom-box").on('click', function (event) {
