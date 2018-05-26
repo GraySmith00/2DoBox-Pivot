@@ -27,7 +27,8 @@ $(document).ready(function() {
       title: $('#title-input').val(),
       body: $('#body-input').val(),
       quality: 'swill',
-      completed: false
+      completed: false,
+      exempt: false
     };
     objects.push(object);
     numCards++;
@@ -56,6 +57,8 @@ $(document).ready(function() {
 
   $('.bottom-box').on('click', completed);
 
+  $('#show-completed').on('click', showCompleted);
+
   // ===================================================================
   // FUNCTIONS
   // ===================================================================
@@ -67,11 +70,16 @@ $(document).ready(function() {
     }
   }
 
-  function renderAllObjects(array) {
+  function renderAllObjects(array, array2 = []) {
     $('.bottom-box').html('');
     array.forEach(function(object, i) {
       $('.bottom-box').prepend(newCardHTML(object, i));
     });
+    if (array2.length > 0) {
+      array2.forEach(function(object, i) {
+        $('.bottom-box').prepend(newCardHTML(object, i));
+      });
+    }
   }
 
   function deleteCard(e) {
@@ -86,7 +94,7 @@ $(document).ready(function() {
   }
 
   function newCardHTML(todoObject, i) {
-    return `<div data-index="${i}" class="card-container ${todoObject.completed ? 'completed display-none' : ''}">
+    return `<div data-index="${i}" class="card-container ${todoObject.completed ? 'completed' : ''} ${todoObject.exempt ? 'display-none' : ''} ">
         <h2 contenteditable="true" class="title-of-card">${
           todoObject.title
         }</h2>
@@ -197,6 +205,7 @@ $(document).ready(function() {
       var index = e.target.parentElement.dataset.index;
       var object = objects[index];
       object.completed = !object.completed;
+      object.exempt = !object.exempt;
       localStorage.setItem('objects', JSON.stringify(objects));
       if (object.completed) {
         e.target.parentElement.classList.add('completed');
@@ -204,6 +213,25 @@ $(document).ready(function() {
         e.target.parentElement.classList.remove('completed');
       }
     }
+  }
+
+  function showCompleted(e) {
+    var completedTodos = objects
+      .filter(function(object) {
+        return object.completed;
+      })
+      .map(function(todo) {
+        todo.exempt = false;
+        localStorage.setItem('objects', JSON.stringify(objects));
+        return todo;
+      });
+
+    var nonCompletedTodos = objects.filter(function(object) {
+      return object.completed === false;
+    });
+    console.log(completedTodos);
+    console.log(nonCompletedTodos);
+    renderAllObjects(nonCompletedTodos, completedTodos);
   }
 }); //close document ready
 
