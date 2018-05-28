@@ -3,8 +3,6 @@ $(document).ready(function() {
   // VARIABLES
   // ===================================================================
 
-  var objects = JSON.parse(localStorage.getItem('objects')) || [];
-
   renderLocalStorage();
 
   // ===================================================================
