@@ -52,7 +52,7 @@ $(document).ready(function() {
   });
   $('.bottom-box').on('focusout', saveBodyEdit);
 
-  // $('#search-input').on('keyup', search);
+  $('#search-input').on('keyup', search);
 
   // $('.bottom-box').on('click', completed);
 
@@ -109,8 +109,6 @@ $(document).ready(function() {
   function deleteCard(e) {
     var cardHTML = $(event.target).closest('.card-container');
     var cardHTMLId = cardHTML[0].dataset.index;
-    console.log(cardHTMLId);
-    console.log(this.parentElement);
     localStorage.removeItem(`${cardHTMLId}`);
     this.parentElement.remove();
   }
@@ -167,7 +165,6 @@ $(document).ready(function() {
 
   function saveBodyEdit(e) {
     var object = JSON.parse(localStorage.getItem(contentEditIndex));
-    console.log(object);
     if (e.target.nodeName === 'P') {
       if (object.body !== e.target.innerText) {
         object.body = e.target.innerText;
@@ -181,15 +178,21 @@ $(document).ready(function() {
     }
   }
 
-  // function search() {
-  //   var searchInput = $('#search-input').val();
-  //   var searchMatches = objects.filter(function(object) {
-  //     return (
-  //       object.title.includes(searchInput) || object.body.includes(searchInput)
-  //     );
-  //   });
-  //   renderAllObjects(searchMatches);
-  // }
+  function search() {
+    var searchInput = $('#search-input').val();
+    // x
+    var searchMatches = Object.keys(localStorage).filter(function(key) {
+      var object = JSON.parse(localStorage.getItem(key));
+      return (
+        object.title.includes(searchInput) || object.body.includes(searchInput)
+      );
+    });
+    $('.bottom-box').html('');
+    searchMatches.forEach(function(matchId) {
+      var object = JSON.parse(localStorage.getItem(matchId));
+      $('.bottom-box').prepend(newCardHTML(object, object.id));
+    });
+  }
 
   // function completed(e) {
   //   if (e.target.className === 'completed-button') {
