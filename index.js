@@ -2,12 +2,9 @@ $(document).ready(function() {
   // ===================================================================
   // VARIABLES
   // ===================================================================
-  // var numCards = 0;
-  // var qualityVariable = "swill";
 
   var objects = JSON.parse(localStorage.getItem('objects')) || [];
 
-  // renderAllObjects(objects);
   renderLocalStorage();
 
   // ===================================================================
@@ -54,9 +51,9 @@ $(document).ready(function() {
 
   $('#search-input').on('keyup', search);
 
-  // $('.bottom-box').on('click', completed);
+  $('.bottom-box').on('click', completed);
 
-  // $('#show-completed').on('click', showCompleted);
+  $('#show-completed').on('click', showCompleted);
 
   // ===================================================================
   // FUNCTIONS
@@ -69,17 +66,17 @@ $(document).ready(function() {
     }
   }
 
-  // function renderAllObjects(array, array2 = []) {
-  //   $('.bottom-box').html('');
-  //   array.forEach(function(object, i) {
-  //     $('.bottom-box').prepend(newCardHTML(object, i));
-  //   });
-  //   if (array2.length > 0) {
-  //     array2.forEach(function(object, i) {
-  //       $('.bottom-box').prepend(newCardHTML(object, i));
-  //     });
-  //   }
-  // }
+  function renderAllObjects(array, array2 = []) {
+    $('.bottom-box').html('');
+    array.forEach(function(object, i) {
+      $('.bottom-box').prepend(newCardHTML(object, i));
+    });
+    if (array2.length > 0) {
+      array2.forEach(function(object, i) {
+        $('.bottom-box').prepend(newCardHTML(object, i));
+      });
+    }
+  }
 
   function renderLocalStorage() {
     $('.bottom-box').html('');
@@ -194,37 +191,46 @@ $(document).ready(function() {
     });
   }
 
-  // function completed(e) {
-  //   if (e.target.className === 'completed-button') {
-  //     var index = e.target.parentElement.dataset.index;
-  //     var object = objects[index];
-  //     object.completed = !object.completed;
-  //     object.exempt = !object.exempt;
-  //     localStorage.setItem('objects', JSON.stringify(objects));
-  //     if (object.completed) {
-  //       e.target.parentElement.classList.add('completed');
-  //     } else {
-  //       e.target.parentElement.classList.remove('completed');
-  //     }
-  //   }
-  // }
+  function completed(e) {
+    if (e.target.className === 'completed-button') {
+      var index = e.target.parentElement.dataset.index;
+      var object = JSON.parse(localStorage.getItem(index));
+      object.completed = !object.completed;
+      object.exempt = !object.exempt;
+      localStorage.setItem(object.id, JSON.stringify(object));
+      if (object.completed) {
+        e.target.parentElement.classList.add('completed');
+      } else {
+        e.target.parentElement.classList.remove('completed');
+      }
+    }
+  }
 
-  // function showCompleted(e) {
-  //   var completedTodos = objects
-  //     .filter(function(object) {
-  //       return object.completed;
-  //     })
-  //     .map(function(todo) {
-  //       todo.exempt = false;
-  //       localStorage.setItem('objects', JSON.stringify(objects));
-  //       return todo;
-  //     });
+  function showCompleted(e) {
+    var completedTodos = Object.keys(localStorage)
+      .filter(function(key) {
+        var object = JSON.parse(localStorage.getItem(key));
+        return object.completed;
+      })
+      .map(function(completedId) {
+        var object = JSON.parse(localStorage.getItem(completedId));
+        object.exempt = false;
+        localStorage.setItem(object.id, JSON.stringify(object));
+        return object;
+      });
 
-  //   var nonCompletedTodos = objects.filter(function(object) {
-  //     return object.completed === false;
-  //   });
-  //   renderAllObjects(nonCompletedTodos, completedTodos);
-  // }
+    var nonCompletedTodos = Object.keys(localStorage)
+      .filter(function(key) {
+        var object = JSON.parse(localStorage.getItem(key));
+        return object.completed === false;
+      })
+      .map(function(matchId) {
+        var object = JSON.parse(localStorage.getItem(matchId));
+        return object;
+      });
+    console.log(nonCompletedTodos);
+    renderAllObjects(nonCompletedTodos, completedTodos);
+  }
 }); //close document ready
 
 // $(".bottom-box").on('click', function (event) {
