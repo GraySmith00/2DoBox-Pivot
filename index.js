@@ -43,14 +43,14 @@ $(document).ready(function() {
   $('.bottom-box').on('click', upVote);
   $('.bottom-box').on('click', downVote);
 
-  // $('.bottom-box').on('click', getContentEditIndex);
-  // $('.bottom-box').on('keydown', function(e) {
-  //   if (e.keyCode === 13) {
-  //     e.preventDefault();
-  //     saveBodyEdit(e);
-  //   }
-  // });
-  // $('.bottom-box').on('focusout', saveBodyEdit);
+  $('.bottom-box').on('click', getContentEditIndex);
+  $('.bottom-box').on('keydown', function(e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      saveBodyEdit(e);
+    }
+  });
+  $('.bottom-box').on('focusout', saveBodyEdit);
 
   // $('#search-input').on('keyup', search);
 
@@ -159,25 +159,27 @@ $(document).ready(function() {
     }
   }
 
-  // var contentEditIndex;
+  var contentEditIndex;
 
-  // function getContentEditIndex(e) {
-  //   contentEditIndex = e.target.parentElement.dataset.index;
-  // }
+  function getContentEditIndex(e) {
+    contentEditIndex = e.target.parentElement.dataset.index;
+  }
 
-  // function saveBodyEdit(e) {
-  //   if (e.target.nodeName === 'P') {
-  //     if (objects[contentEditIndex].body !== e.target.innerText) {
-  //       objects[contentEditIndex].body = e.target.innerText;
-  //       localStorage.setItem('objects', JSON.stringify(objects));
-  //     }
-  //   } else if (e.target.nodeName === 'H2') {
-  //     if (objects[contentEditIndex].title !== e.target.innerText) {
-  //       objects[contentEditIndex].title = e.target.innerText;
-  //       localStorage.setItem('objects', JSON.stringify(objects));
-  //     }
-  //   }
-  // }
+  function saveBodyEdit(e) {
+    var object = JSON.parse(localStorage.getItem(contentEditIndex));
+    console.log(object);
+    if (e.target.nodeName === 'P') {
+      if (object.body !== e.target.innerText) {
+        object.body = e.target.innerText;
+        localStorage.setItem(object.id, JSON.stringify(object));
+      }
+    } else if (e.target.nodeName === 'H2') {
+      if (object.title !== e.target.innerText) {
+        object.title = e.target.innerText;
+        localStorage.setItem(object.id, JSON.stringify(object));
+      }
+    }
+  }
 
   // function search() {
   //   var searchInput = $('#search-input').val();
