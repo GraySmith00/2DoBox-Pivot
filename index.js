@@ -26,7 +26,7 @@ $(document).ready(function() {
       completed: false,
       exempt: false
     };
-    $('.bottom-box').prepend(newCardHTML(object, object.id));
+    $('.bottom-box').prepend(newCardHTML(object));
     localStorage.setItem(object.id, JSON.stringify(object));
     this.reset();
   });
@@ -66,12 +66,12 @@ $(document).ready(function() {
 
   function renderAllObjects(array, array2 = []) {
     $('.bottom-box').html('');
-    array.forEach(function(object, i) {
-      $('.bottom-box').prepend(newCardHTML(object, i));
+    array.forEach(function(object) {
+      $('.bottom-box').prepend(newCardHTML(object));
     });
     if (array2.length > 0) {
-      array2.forEach(function(object, i) {
-        $('.bottom-box').prepend(newCardHTML(object, i));
+      array2.forEach(function(object) {
+        $('.bottom-box').prepend(newCardHTML(object));
       });
     }
   }
@@ -80,12 +80,12 @@ $(document).ready(function() {
     $('.bottom-box').html('');
     Object.keys(localStorage).forEach(function(key) {
       var object = JSON.parse(localStorage.getItem(key));
-      $('.bottom-box').prepend(newCardHTML(object, object.id));
+      $('.bottom-box').prepend(newCardHTML(object));
     });
   }
 
-  function newCardHTML(todoObject, i) {
-    return `<div data-index="${i}" class="card-container ${todoObject.completed ? 'completed' : ''} ${todoObject.exempt ? 'display-none' : ''} ">
+  function newCardHTML(todoObject) {
+    return `<div data-index="${todoObject.id}" class="card-container ${todoObject.completed ? 'completed' : ''} ${todoObject.exempt ? 'display-none' : ''} ">
         <h2 contenteditable="true" class="title-of-card">${
           todoObject.title
         }</h2>
@@ -183,7 +183,7 @@ $(document).ready(function() {
     $('.bottom-box').html('');
     searchMatches.forEach(function(matchId) {
       var object = JSON.parse(localStorage.getItem(matchId));
-      $('.bottom-box').prepend(newCardHTML(object, object.id));
+      $('.bottom-box').prepend(newCardHTML(object));
     });
   }
 
@@ -191,14 +191,15 @@ $(document).ready(function() {
     if (e.target.className === 'completed-button') {
       var index = e.target.parentElement.dataset.index;
       var object = JSON.parse(localStorage.getItem(index));
-      object.completed = !object.completed;
-      object.exempt = !object.exempt;
-      localStorage.setItem(object.id, JSON.stringify(object));
-      if (object.completed) {
-        e.target.parentElement.classList.add('completed');
-      } else {
-        e.target.parentElement.classList.remove('completed');
-      }
+      console.log(object);
+      // object.completed = !object.completed;
+      // object.exempt = !object.exempt;
+      // localStorage.setItem(object.id, JSON.stringify(object));
+      // if (object.completed) {
+      //   e.target.parentElement.classList.add('completed');
+      // } else {
+      //   e.target.parentElement.classList.remove('completed');
+      // }
     }
   }
 
