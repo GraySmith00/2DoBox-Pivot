@@ -22,7 +22,7 @@ $(document).ready(function() {
       id: Date.now(),
       title: $('#title-input').val(),
       body: $('#body-input').val(),
-      quality: 'swill',
+      quality: "None",
       completed: false,
       exempt: false
     };
@@ -117,18 +117,17 @@ $(document).ready(function() {
     var currentQuality = qualityElement.text().trim();
     var index = e.target.parentElement.dataset.index;
     var object = JSON.parse(localStorage.getItem(index));
+    var importanceArray = ["None", "Low", "Normal", "High", "Critical"];
     if (e.target.className === 'upvote') {
-      if (currentQuality === 'swill') {
-        object.quality = 'plausible';
+      var importanceIndex = importanceArray.indexOf(object.quality);
+      if(importanceIndex < importanceArray.length -1){
+        importanceIndex++;
+      }
+        object.quality = importanceArray[importanceIndex];
         localStorage.setItem(object.id, JSON.stringify(object));
-        qualityElement.text('plausible');
-      } else if (currentQuality === 'plausible') {
-        object.quality = 'genius';
-        localStorage.setItem(object.id, JSON.stringify(object));
-        qualityElement.text('genius');
+        qualityElement.text(object.quality); 
       }
     }
-  }
 
   function downVote(e) {
     var qualityElement = $(
@@ -139,18 +138,17 @@ $(document).ready(function() {
     var currentQuality = qualityElement.text().trim();
     var index = e.target.parentElement.dataset.index;
     var object = JSON.parse(localStorage.getItem(index));
+    var importanceArray = ["None", "Low", "Normal", "High", "Critical"];
     if (e.target.className === 'downvote') {
-      if (currentQuality === 'plausible') {
-        object.quality = 'swill';
-        localStorage.setItem(object.id, JSON.stringify(object));
-        qualityElement.text('swill');
-      } else if (currentQuality === 'genius') {
-        object.quality = 'plausible';
-        localStorage.setItem(object.id, JSON.stringify(object));
-        qualityElement.text('plausible');
+     var importanceIndex = importanceArray.indexOf(object.quality);
+     if(importanceIndex > 0){
+       importanceIndex--;    
+     } 
+      object.quality = importanceArray[importanceIndex];
+      localStorage.setItem(object.id, JSON.stringify(object));
+      qualityElement.text(object.quality);
       }
     }
-  }
 
   var contentEditIndex;
 
