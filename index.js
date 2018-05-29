@@ -26,8 +26,9 @@ $(document).ready(function() {
       completed: false,
       exempt: false
     };
-    $('.bottom-box').prepend(newCardHTML(object));
+    // $('.bottom-box').prepend(newCardHTML(object));
     localStorage.setItem(object.id, JSON.stringify(object));
+    renderLocalStorage();
     this.reset();
   });
 
@@ -52,6 +53,7 @@ $(document).ready(function() {
   $('.bottom-box').on('click', completed);
 
   $('#show-completed').on('click', showCompleted);
+  $('#show-more-todos').on('click', showMore);
 
   // ===================================================================
   // FUNCTIONS
@@ -66,7 +68,7 @@ $(document).ready(function() {
 
   function renderAllObjects(array, array2 = []) {
     $('.bottom-box').html('');
-    array.forEach(function(object) {
+    array.slice(array.length - 10, array.length).forEach(function(object) {
       $('.bottom-box').prepend(newCardHTML(object));
     });
     if (array2.length > 0) {
@@ -78,11 +80,22 @@ $(document).ready(function() {
 
   function renderLocalStorage() {
     $('.bottom-box').html('');
-    Object.keys(localStorage).forEach(function(key) {
+    Object.keys(localStorage).slice((Object.keys(localStorage)).length - 10, (Object.keys(localStorage)).length).forEach(function(key) {
       var object = JSON.parse(localStorage.getItem(key));
       $('.bottom-box').prepend(newCardHTML(object));
     });
   }
+
+
+  function showMore() {
+    Object.keys(localStorage).slice(0, (Object.keys(localStorage)).length - 10).reverse().forEach(function(key) {
+      var object = JSON.parse(localStorage.getItem(key));
+      $('.bottom-box').append(newCardHTML(object));
+    });
+  }
+
+
+
 
   function newCardHTML(todoObject) {
     return `<div data-index="${todoObject.id}" class="card-container ${todoObject.completed ? 'completed' : ''} ${todoObject.exempt ? 'display-none' : ''} ">
