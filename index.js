@@ -3,7 +3,7 @@ $(document).ready(function() {
   // VARIABLES
   // ===================================================================
 
-  renderLocalStorage();
+  renderObjects(Object.keys(localStorage), 10);
 
   // ===================================================================
   // EVENT LISTENERS
@@ -22,13 +22,13 @@ $(document).ready(function() {
       id: Date.now(),
       title: $('#title-input').val(),
       body: $('#body-input').val(),
-      quality: "None",
+      quality: 'None',
       completed: false,
       exempt: false
     };
     // $('.bottom-box').prepend(newCardHTML(object));
     localStorage.setItem(object.id, JSON.stringify(object));
-    renderLocalStorage();
+    renderObjects(Object.keys(localStorage), 10);
     this.reset();
   });
 
@@ -53,7 +53,9 @@ $(document).ready(function() {
   $('.bottom-box').on('click', completed);
 
   $('#show-completed').on('click', showCompleted);
-  $('#show-more-todos').on('click', showMore);
+  $('#show-more-todos').on('click', function() {
+    renderObjects(Object.keys(localStorage), Object.keys(localStorage).length);
+  });
 
   // ===================================================================
   // FUNCTIONS
@@ -66,39 +68,29 @@ $(document).ready(function() {
     }
   }
 
-  function renderAllObjects(array, array2 = []) {
+  function renderObjects(array, displayCount) {
     $('.bottom-box').html('');
-    array.slice(array.length - 10, array.length).forEach(function(object) {
-      $('.bottom-box').prepend(newCardHTML(object));
-    });
-    if (array2.length > 0) {
-      array2.forEach(function(object) {
-        $('.bottom-box').prepend(newCardHTML(object));
+    array
+      .slice(array.length - displayCount, array.length)
+      .forEach(function(element) {
+        if (typeof element !== 'object') {
+          element = JSON.parse(localStorage.getItem(element));
+        }
+        $('.bottom-box').prepend(newCardHTML(element));
       });
-    }
   }
 
-  function renderLocalStorage() {
-    $('.bottom-box').html('');
-    Object.keys(localStorage).slice((Object.keys(localStorage)).length - 10, (Object.keys(localStorage)).length).forEach(function(key) {
-      var object = JSON.parse(localStorage.getItem(key));
-      $('.bottom-box').prepend(newCardHTML(object));
-    });
-  }
-
-
-  function showMore() {
-    Object.keys(localStorage).slice(0, (Object.keys(localStorage)).length - 10).reverse().forEach(function(key) {
-      var object = JSON.parse(localStorage.getItem(key));
-      $('.bottom-box').append(newCardHTML(object));
-    });
-  }
-
-
-
+  // function showMore() {
+  //   Object.keys(localStorage).slice(0, (Object.keys(localStorage)).length - 10).reverse().forEach(function(key) {
+  //     var object = JSON.parse(localStorage.getItem(key));
+  //     $('.bottom-box').append(newCardHTML(object));
+  //   });
+  // }
 
   function newCardHTML(todoObject) {
-    return `<div data-index="${todoObject.id}" class="card-container ${todoObject.completed ? 'completed' : ''} ${todoObject.exempt ? 'display-none' : ''} ">
+    return `<div data-index="${
+      todoObject.id
+    }" class="card-container ${todoObject.completed ? 'completed' : ''} ${todoObject.exempt ? 'display-none' : ''} ">
         <h2 contenteditable="true" class="title-of-card">${
           todoObject.title
         }</h2>
@@ -130,17 +122,17 @@ $(document).ready(function() {
     var currentQuality = qualityElement.text().trim();
     var index = e.target.parentElement.dataset.index;
     var object = JSON.parse(localStorage.getItem(index));
-    var importanceArray = ["None", "Low", "Normal", "High", "Critical"];
+    var importanceArray = ['None', 'Low', 'Normal', 'High', 'Critical'];
     if (e.target.className === 'upvote') {
       var importanceIndex = importanceArray.indexOf(object.quality);
-      if(importanceIndex < importanceArray.length -1){
+      if (importanceIndex < importanceArray.length - 1) {
         importanceIndex++;
       }
-        object.quality = importanceArray[importanceIndex];
-        localStorage.setItem(object.id, JSON.stringify(object));
-        qualityElement.text(object.quality); 
-      }
+      object.quality = importanceArray[importanceIndex];
+      localStorage.setItem(object.id, JSON.stringify(object));
+      qualityElement.text(object.quality);
     }
+  }
 
   function downVote(e) {
     var qualityElement = $(
@@ -151,17 +143,17 @@ $(document).ready(function() {
     var currentQuality = qualityElement.text().trim();
     var index = e.target.parentElement.dataset.index;
     var object = JSON.parse(localStorage.getItem(index));
-    var importanceArray = ["None", "Low", "Normal", "High", "Critical"];
+    var importanceArray = ['None', 'Low', 'Normal', 'High', 'Critical'];
     if (e.target.className === 'downvote') {
-     var importanceIndex = importanceArray.indexOf(object.quality);
-     if(importanceIndex > 0){
-       importanceIndex--;    
-     } 
+      var importanceIndex = importanceArray.indexOf(object.quality);
+      if (importanceIndex > 0) {
+        importanceIndex--;
+      }
       object.quality = importanceArray[importanceIndex];
       localStorage.setItem(object.id, JSON.stringify(object));
       qualityElement.text(object.quality);
-      }
     }
+  }
 
   var contentEditIndex;
 
@@ -186,7 +178,6 @@ $(document).ready(function() {
 
   function search() {
     var searchInput = $('#search-input').val();
-    // x
     var searchMatches = Object.keys(localStorage).filter(function(key) {
       var object = JSON.parse(localStorage.getItem(key));
       return (
@@ -204,15 +195,14 @@ $(document).ready(function() {
     if (e.target.className === 'completed-button') {
       var index = e.target.parentElement.dataset.index;
       var object = JSON.parse(localStorage.getItem(index));
-      console.log(object);
-      // object.completed = !object.completed;
-      // object.exempt = !object.exempt;
-      // localStorage.setItem(object.id, JSON.stringify(object));
-      // if (object.completed) {
-      //   e.target.parentElement.classList.add('completed');
-      // } else {
-      //   e.target.parentElement.classList.remove('completed');
-      // }
+      object.completed = !object.completed;
+      object.exempt = true;
+      localStorage.setItem(object.id, JSON.stringify(object));
+      if (object.completed) {
+        e.target.parentElement.classList.add('completed');
+      } else {
+        e.target.parentElement.classList.remove('completed');
+      }
     }
   }
 
@@ -238,8 +228,8 @@ $(document).ready(function() {
         var object = JSON.parse(localStorage.getItem(matchId));
         return object;
       });
-    console.log(nonCompletedTodos);
-    renderAllObjects(nonCompletedTodos, completedTodos);
+    var completedComboArray = nonCompletedTodos.concat(completedTodos);
+    renderObjects(completedComboArray, 10);
   }
 }); //close document ready
 
