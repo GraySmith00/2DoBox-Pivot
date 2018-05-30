@@ -209,6 +209,14 @@ p {
   width: 20px;
 }
 
+
+#completed-button {
+  background-color: #2e8882;
+  font-size: .8em;
+  min-width: 8rem;
+  width: 15%;
+}
+
 .delete-button {
   background-image: url(./images/delete.svg);
   background-size: cover;

@@ -111,7 +111,7 @@ $(document).ready(function() {
         <p class="quality">quality: <span class="qualityVariable">${
           todoObject.quality
         }</span></p>
-        <button class="completed-button">Completed</button>
+        <button id="completed-button" class="completed-button">Completed</button>
         <hr>
       </div>`;
   }
