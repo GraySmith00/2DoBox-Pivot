@@ -62,7 +62,6 @@ button {
 .container {
   display: flex;
   flex-direction: column;
-  font-family: 'Roboto Slab', serif;
 }
 
 .top-box {
@@ -85,12 +84,22 @@ button {
   text-align: center;
 }
 
-.idea {
-  color: #00a79d;
-}
-
 #body-input {
   margin-top: 1rem;
+}
+
+.sort-importance  {
+  display: flex;
+  justify-content: space-between;
+  list-style-type: none;
+  padding: 0;
+  width: 50%;
+}
+
+.sort-importance li:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+  transition: ease-in 0.3s;
 }
 
 #search-input {
@@ -120,7 +129,6 @@ button {
 input {
   align-items: center;
   display: flex;
-  font-family: 'Open Sans', sans-serif;
   font-size: 100%;
   justify-content: space-between;
   margin: auto;
@@ -142,7 +150,6 @@ input {
 .title-of-card {
   color: #6d6e71;
   display: inline-block;
-  font-family: 'Roboto Slab', serif;
   font-size: 140%;
 }
 
@@ -158,18 +165,15 @@ input {
 h2 {
   color: #6d6e71;
   display: inline-block;
-  font-family: 'Roboto Slab', serif;
   font-size: 150%;
 }
 
 p {
   color: #939598;
-  font-family: 'Open Sans', sans-serif;
 }
 
 .body-of-card {
   color: #939598;
-  font-family: 'Open Sans', sans-serif;
   font-size: 100%;
 }
 
@@ -207,6 +211,14 @@ p {
   background-size: cover;
   height: 20px;
   width: 20px;
+}
+
+
+#completed-button {
+  background-color: #2e8882;
+  font-size: .8em;
+  min-width: 8rem;
+  width: 15%;
 }
 
 .delete-button {
