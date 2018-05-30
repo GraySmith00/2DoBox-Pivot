@@ -4,11 +4,33 @@ $(document).ready(function() {
   // ===================================================================
 
   renderObjects(Object.keys(localStorage), 10);
+  displayShowMore();
 
   // ===================================================================
   // EVENT LISTENERS
   // ===================================================================
-  $('#todo-form').submit(function(event) {
+  $('#todo-form').submit(addObject);
+  $('#title-input').on('keyup', buttonDisabled);
+  $('#body-input').on('keyup', buttonDisabled);
+  $('.bottom-box').on('click', '.delete-button', deleteCard);
+  $('.bottom-box').on('click', vote);
+  $('.bottom-box').on('click', getContentEditIndex);
+  $('.bottom-box').on('keydown', function(e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      saveEdit(e);
+    }
+  });
+  $('.bottom-box').on('focusout', saveEdit);
+  $('#search-input').on('keyup', search);
+  $('.bottom-box').on('click', completed);
+  $('#show-completed').on('click', showCompleted);
+  $('#show-more').on('click', showMore);
+
+  // ===================================================================
+  // FUNCTIONS
+  // ===================================================================
+  function addObject(e) {
     event.preventDefault();
     if ($('#title-input').val() === '') {
       alert('Missing a title!');
@@ -29,37 +51,10 @@ $(document).ready(function() {
     // $('.bottom-box').prepend(newCardHTML(object));
     localStorage.setItem(object.id, JSON.stringify(object));
     renderObjects(Object.keys(localStorage), 10);
+    displayShowMore();
     this.reset();
-  });
+  }
 
-  $('#title-input').on('keyup', buttonDisabled);
-  $('#body-input').on('keyup', buttonDisabled);
-
-  $('.bottom-box').on('click', '.delete-button', deleteCard);
-  $('.bottom-box').on('click', upVote);
-  $('.bottom-box').on('click', downVote);
-
-  $('.bottom-box').on('click', getContentEditIndex);
-  $('.bottom-box').on('keydown', function(e) {
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      saveBodyEdit(e);
-    }
-  });
-  $('.bottom-box').on('focusout', saveBodyEdit);
-
-  $('#search-input').on('keyup', search);
-
-  $('.bottom-box').on('click', completed);
-
-  $('#show-completed').on('click', showCompleted);
-  $('#show-more-todos').on('click', function() {
-    renderObjects(Object.keys(localStorage), Object.keys(localStorage).length);
-  });
-
-  // ===================================================================
-  // FUNCTIONS
-  // ===================================================================
   function buttonDisabled() {
     if ($('#title-input').val() !== '' || $('#body-input').val() !== '') {
       $('.save-btn').prop('disabled', false);
@@ -70,22 +65,37 @@ $(document).ready(function() {
 
   function renderObjects(array, displayCount) {
     $('.bottom-box').html('');
-    array
-      .slice(array.length - displayCount, array.length)
-      .forEach(function(element) {
-        if (typeof element !== 'object') {
-          element = JSON.parse(localStorage.getItem(element));
+    var tenMostRecent = array
+      .filter(function(element, index) {
+        var firstIndex = array.length - displayCount;
+        return index >= firstIndex;
+      })
+      .map(function(match) {
+        if (typeof match !== 'object') {
+          match = JSON.parse(localStorage.getItem(match));
         }
-        $('.bottom-box').prepend(newCardHTML(element));
+        return match;
       });
+    tenMostRecent.forEach(function(element) {
+      $('.bottom-box').prepend(newCardHTML(element));
+    });
   }
 
-  // function showMore() {
-  //   Object.keys(localStorage).slice(0, (Object.keys(localStorage)).length - 10).reverse().forEach(function(key) {
-  //     var object = JSON.parse(localStorage.getItem(key));
-  //     $('.bottom-box').append(newCardHTML(object));
-  //   });
-  // }
+  function displayShowMore() {
+    if (Object.keys(localStorage).length > 10) {
+      $('#show-more').removeClass('display-none');
+    }
+  }
+
+  function showMore() {
+    Object.keys(localStorage)
+      .slice(0, Object.keys(localStorage).length - 10)
+      .reverse()
+      .forEach(function(key) {
+        var object = JSON.parse(localStorage.getItem(key));
+        $('.bottom-box').append(newCardHTML(object));
+      });
+  }
 
   function newCardHTML(todoObject) {
     return `<div data-index="${
@@ -111,47 +121,37 @@ $(document).ready(function() {
     var cardHTMLId = cardHTML[0].dataset.index;
     localStorage.removeItem(`${cardHTMLId}`);
     this.parentElement.remove();
+    displayShowMore();
   }
 
-  function upVote(e) {
-    var qualityElement = $(
-      $(event.target)
-        .siblings('p.quality')
-        .children()[0]
-    );
-    var currentQuality = qualityElement.text().trim();
-    var index = e.target.parentElement.dataset.index;
-    var object = JSON.parse(localStorage.getItem(index));
-    var importanceArray = ['None', 'Low', 'Normal', 'High', 'Critical'];
-    if (e.target.className === 'upvote') {
+  function vote(e) {
+    if (e.target.className === 'upvote' || e.target.className === 'downvote') {
+      var qualityElement = $(
+        $(event.target)
+          .siblings('p.quality')
+          .children()[0]
+      );
+      var index = e.target.parentElement.dataset.index;
+      var object = JSON.parse(localStorage.getItem(index));
+      var importanceArray = ['None', 'Low', 'Normal', 'High', 'Critical'];
       var importanceIndex = importanceArray.indexOf(object.quality);
-      if (importanceIndex < importanceArray.length - 1) {
-        importanceIndex++;
-      }
-      object.quality = importanceArray[importanceIndex];
-      localStorage.setItem(object.id, JSON.stringify(object));
-      qualityElement.text(object.quality);
     }
-  }
-
-  function downVote(e) {
-    var qualityElement = $(
-      $(event.target)
-        .siblings('p.quality')
-        .children()[0]
-    );
-    var currentQuality = qualityElement.text().trim();
-    var index = e.target.parentElement.dataset.index;
-    var object = JSON.parse(localStorage.getItem(index));
-    var importanceArray = ['None', 'Low', 'Normal', 'High', 'Critical'];
-    if (e.target.className === 'downvote') {
-      var importanceIndex = importanceArray.indexOf(object.quality);
-      if (importanceIndex > 0) {
-        importanceIndex--;
-      }
+    if (
+      e.target.className === 'upvote' &&
+      importanceIndex < importanceArray.length - 1
+    ) {
+      importanceIndex++;
       object.quality = importanceArray[importanceIndex];
       localStorage.setItem(object.id, JSON.stringify(object));
       qualityElement.text(object.quality);
+      return;
+    }
+    if (e.target.className === 'downvote' && importanceIndex > 0) {
+      importanceIndex--;
+      object.quality = importanceArray[importanceIndex];
+      localStorage.setItem(object.id, JSON.stringify(object));
+      qualityElement.text(object.quality);
+      return;
     }
   }
 
@@ -161,7 +161,7 @@ $(document).ready(function() {
     contentEditIndex = e.target.parentElement.dataset.index;
   }
 
-  function saveBodyEdit(e) {
+  function saveEdit(e) {
     var object = JSON.parse(localStorage.getItem(contentEditIndex));
     if (e.target.nodeName === 'P') {
       if (object.body !== e.target.innerText) {

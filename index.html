@@ -3,16 +3,15 @@
 <head>
     <title>2DoBox</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 </head>
 
 <body>
     <div class="container box">
         <section class="top-box">
-            <h1 class="idea">idea <span class="box">Box</span></h1>
-            
+            <h1>2Do<span>Box</span></h1>
             <form id="todo-form">
                 <input id="title-input" type="text" aria-label="title input" placeholder="Title" autocomplete="off">
                 <input id="body-input" type="text" aria-label="body input" placeholder="Task" autocomplete="off">
@@ -26,7 +25,7 @@
             </div>
         </section>
         <section class="bottom-box"></section>
-        <button id="show-more-todos" class="show-more">Show More Todos</button>
+        <button id="show-more" class="show-more display-none">Show More Todos</button>
     </div>
 
     <script src="./jquery/jquery-3.2.1.js"></script>

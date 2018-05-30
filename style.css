@@ -1,26 +1,51 @@
 *,
 *:after,
 *:before {
- box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  font-family: 'Roboto', sans-serif;
 }
 
 h1 {
-  color: #6d6e71;
+  color: #f2f2f2;
   display: inline-block;
-  font-size: 275%;
+  font-family: 'Open sans', sans-serif;
+  font-size: 3rem;
+  font-weight: 300;
   margin-bottom: 30px;
 }
 
-form{
-  width: 45%;
+h1 span {
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+
+  background: #f2709c; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #ff9472,
+    #f2709c
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #ff9472,
+    #f2709c
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  -webkit-background-clip: text;
 }
 
-input{
+form {
+  width: 50%;
+}
+
+input {
+  border: 0;
   height: 2rem;
+  padding-left: 0.5rem;
   width: 100%;
 }
 
@@ -42,9 +67,17 @@ button {
 
 .top-box {
   align-items: center;
-  background: #007991;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #78ffd6, #007991);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #78ffd6, #007991); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #007991; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #78ffd6,
+    #007991
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #78ffd6,
+    #007991
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   display: flex;
   flex-direction: column;
   height: 300px;
@@ -56,17 +89,18 @@ button {
   color: #00a79d;
 }
 
- #body-input {
+#body-input {
   margin-top: 1rem;
-} 
+}
 
 #search-input {
   margin-top: 50px;
+  border: solid #999 1px;
 }
 
-.save-btn:disabled, 
+.save-btn:disabled,
 .save-btn:disabled:hover {
-  background-color:  rgb(189, 219, 216);
+  background-color: rgb(189, 219, 216);
 }
 
 .save-btn:hover {
@@ -80,7 +114,7 @@ button {
 }
 
 .mid-box div {
-  width: 45%;
+  width: 50%;
 }
 
 input {
@@ -95,14 +129,14 @@ input {
 .card-container {
   margin: auto;
   position: relative;
-  width: 45%;
+  width: 50%;
 }
 
 .card {
   background-color: #ffffff;
   height: auto;
   margin: auto;
-  width: 45%;
+  width: 50%;
 }
 
 .title-of-card {
@@ -194,19 +228,25 @@ p {
 
 .show-more {
   margin: 0 auto 4rem auto;
-  width: 45%;
+  width: 50%;
+}
+
+.display-none {
+  display: none;
+}
+
+@media (max-width: 875px) {
+  form,
+  .mid-box div,
+  .card-container {
+    width: 75%;
+  }
 }
 
 @media (max-width: 640px) {
-  
-  
-  form, 
-  .mid-box div,   
+  form,
+  .mid-box div,
   .card-container {
     width: 85%;
-  }
-
-  #search-input {
-    border: solid #999 1px;
   }
 }
