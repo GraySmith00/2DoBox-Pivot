@@ -1,24 +1,11 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  font-family: 'Roboto Slab', serif;
-}
-
-.container-box {
-  margin: 0;
+*,
+*:after,
+*:before {
+ box-sizing: border-box;
 }
 
 body {
-  box-sizing: border-box;
   margin: 0;
-}
-
-.top-box {
-  background-color: #e5f3f2;
-  box-sizing: border-box;
-  height: 300px;
-  margin: 0;
-  text-align: center;
 }
 
 h1 {
@@ -28,51 +15,72 @@ h1 {
   margin-bottom: 30px;
 }
 
-.idea {
-  color: #00a79d;
-}
-
-#title-input {
-  align-items: center;
-  display: flex;
-  height: 30px;
-  justify-content: space-between;
+form{
   width: 45%;
 }
 
-#body-input {
-  align-items: center;
-  display: flex;
-  height: 30px;
-  justify-content: space-between;
-  width: 45%;
+input{
+  height: 2rem;
+  width: 100%;
 }
 
-#search-input {
-  height: 30px;
-  margin-top: 50px;
-  width: 45%;
-}
-
-.save-btn {
-  background-color: #00a79d;
+button {
+  background-color: #2e8882;
   border: none;
   color: #fff;
   font-size: 120%;
   height: 30px;
-  width: 45.5%;
+  margin-top: 1rem;
+  width: 100%;
 }
 
-.save-btn:disabled {
-  background-color: rgb(191, 255, 251);
+.container {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Roboto Slab', serif;
 }
 
+.top-box {
+  align-items: center;
+  background: #007991;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #78ffd6, #007991);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #78ffd6, #007991); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  margin: 0;
+  text-align: center;
+}
+
+.idea {
+  color: #00a79d;
+}
+
+ #body-input {
+  margin-top: 1rem;
+} 
+
+#search-input {
+  margin-top: 50px;
+}
+
+.save-btn:disabled, 
 .save-btn:disabled:hover {
-  background-color: rgb(191, 255, 251);
+  background-color:  rgb(189, 219, 216);
 }
 
 .save-btn:hover {
   background-color: #045e55;
+}
+
+.mid-box {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.mid-box div {
+  width: 45%;
 }
 
 input {
@@ -131,7 +139,7 @@ p {
   font-size: 100%;
 }
 
-button {
+.card-container button {
   background-color: transparent;
   border: none;
 }
@@ -184,7 +192,16 @@ button {
   width: 20px;
 }
 
+.show-more {
+  margin: 0 auto 4rem auto;
+  width: 45%;
+}
+
 @media (max-width: 640px) {
+  
+  
+  form, 
+  .mid-box div,   
   .card-container {
     width: 85%;
   }

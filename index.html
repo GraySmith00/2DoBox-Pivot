@@ -9,22 +9,25 @@
 </head>
 
 <body>
-    <section class="container box">
-        <article class="top-box">
-            <h1 class="idea">idea</h1>
-            <h1 class="box">Box</h1>
+    <div class="container box">
+        <section class="top-box">
+            <h1 class="idea">idea <span class="box">Box</span></h1>
+            
             <form id="todo-form">
                 <input id="title-input" type="text" aria-label="title input" placeholder="Title" autocomplete="off">
                 <input id="body-input" type="text" aria-label="body input" placeholder="Task" autocomplete="off">
                 <button class="save-btn" aria-label="todo save button" disabled="true">save</button>
             </form>
-        </article>
-
-        <input id="search-input" type="text" placeholder="Filter">
-        <button id="show-completed">Show Completed</button>
-        <article class="bottom-box"></article>
-        <button id="show-more-todos">Show More Todos</button>
-    </section>
+        </section>
+        <section class="mid-box">
+            <div>
+                <input id="search-input" type="text" placeholder="Filter">
+                <button id="show-completed">Show Completed</button>
+            </div>
+        </section>
+        <section class="bottom-box"></section>
+        <button id="show-more-todos" class="show-more">Show More Todos</button>
+    </div>
 
     <script src="./jquery/jquery-3.2.1.js"></script>
     <script src="./index.js"></script>
