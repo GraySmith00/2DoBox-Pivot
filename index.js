@@ -26,7 +26,21 @@ $(document).ready(function() {
   $('.bottom-box').on('click', completed);
   $('#show-completed').on('click', showCompleted);
   $('#show-more').on('click', showMore);
-
+  $('.none').on('click', function(){
+    showImportance("None");
+  });
+  $('.low').on('click', function(){
+    showImportance("Low");
+  });
+  $('.normal').on('click', function(){
+    showImportance("Normal");
+  });
+  $('.high').on('click', function(){
+    showImportance("High");
+  });
+  $('.critical').on('click', function(){
+    showImportance("Critical");
+  });
   // ===================================================================
   // FUNCTIONS
   // ===================================================================
@@ -231,7 +245,28 @@ $(document).ready(function() {
     var completedComboArray = nonCompletedTodos.concat(completedTodos);
     renderObjects(completedComboArray, 10);
   }
-}); //close document ready
+
+
+  function showImportance(importance) {
+    var array = Object.keys(localStorage)
+      .filter(function(key){
+        var object = JSON.parse(localStorage.getItem(key));
+        return object.quality === importance;
+      })
+      .map(function(matchId) {
+        var object = JSON.parse(localStorage.getItem(matchId));
+        return object;
+      });
+      
+    renderObjects(array, 10);
+  }
+
+
+
+});
+
+
+//close document ready
 
 // $(".bottom-box").on('click', function (event) {
 //     var currentQuality = $($(event.target).siblings('p.quality').children()[0]).text().trim();
