@@ -88,7 +88,7 @@ button {
   margin-top: 1rem;
 }
 
-.sort-importance  {
+.sort-importance {
   display: flex;
   justify-content: space-between;
   list-style-type: none;
@@ -213,10 +213,13 @@ p {
   width: 20px;
 }
 
+.red-text {
+  color: crimson;
+}
 
 #completed-button {
   background-color: #2e8882;
-  font-size: .8em;
+  font-size: 0.8em;
   min-width: 8rem;
   width: 15%;
 }

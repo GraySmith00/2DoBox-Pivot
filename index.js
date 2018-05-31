@@ -26,21 +26,23 @@ $(document).ready(function() {
   $('.bottom-box').on('click', completed);
   $('#show-completed').on('click', showCompleted);
   $('#show-more').on('click', showMore);
-  $('.none').on('click', function(){
-    showImportance("None");
+  $('.none').on('click', function() {
+    showImportance('None');
   });
-  $('.low').on('click', function(){
-    showImportance("Low");
+  $('.low').on('click', function() {
+    showImportance('Low');
   });
-  $('.normal').on('click', function(){
-    showImportance("Normal");
+  $('.normal').on('click', function() {
+    showImportance('Normal');
   });
-  $('.high').on('click', function(){
-    showImportance("High");
+  $('.high').on('click', function() {
+    showImportance('High');
   });
-  $('.critical').on('click', function(){
-    showImportance("Critical");
+  $('.critical').on('click', function() {
+    showImportance('Critical');
   });
+  $('.bottom-box').on('keydown', characterCount);
+
   // ===================================================================
   // FUNCTIONS
   // ===================================================================
@@ -52,6 +54,10 @@ $(document).ready(function() {
     }
     if ($('#body-input').val() === '') {
       alert('Missing a body!');
+      return;
+    }
+    if ($('#body-input').val().length >= 120) {
+      alert('Sorry, but the max task length is 120 characters!');
       return;
     }
     var object = {
@@ -119,12 +125,17 @@ $(document).ready(function() {
           todoObject.title
         }</h2>
         <button class="delete-button"></button>
-        <p contenteditable="true" class="body-of-card">${todoObject.body}</p>
+        <p contenteditable="true" max="50" class="body-of-card">${
+          todoObject.body
+        }</p>
         <button class="upvote"></button>
         <button class="downvote"></button>
         <p class="quality">quality: <span class="qualityVariable">${
           todoObject.quality
         }</span></p>
+        <p class="character-count">Character Count: ${
+          todoObject.body.length
+        }</p>
         <button id="completed-button" class="completed-button">Completed</button>
         <hr>
       </div>`;
@@ -246,10 +257,9 @@ $(document).ready(function() {
     renderObjects(completedComboArray, 10);
   }
 
-
   function showImportance(importance) {
     var array = Object.keys(localStorage)
-      .filter(function(key){
+      .filter(function(key) {
         var object = JSON.parse(localStorage.getItem(key));
         return object.quality === importance;
       })
@@ -257,84 +267,24 @@ $(document).ready(function() {
         var object = JSON.parse(localStorage.getItem(matchId));
         return object;
       });
-      
+
     renderObjects(array, 10);
   }
 
-
-
+  function characterCount(e) {
+    if (e.target.className === 'body-of-card') {
+      var numCharacters = $(e.target).text().length;
+      $(e.target).siblings()[5].innerText = `Character Count: ${numCharacters}`;
+      if (numCharacters === 120 && event.keyCode != 8) {
+        event.preventDefault();
+        $(e.target)
+          .siblings()[5]
+          .classList.add('red-text');
+        return;
+      }
+      $(e.target)
+        .siblings()[5]
+        .classList.remove('red-text');
+    }
+  }
 });
-
-
-//close document ready
-
-// $(".bottom-box").on('click', function (event) {
-//     var currentQuality = $($(event.target).siblings('p.quality').children()[0]).text().trim();
-//     var qualityVariable;
-
-//     if (event.target.className === "upvote" || event.target.className === "downvote") {
-
-//         if (event.target.className === "upvote" && currentQuality === "plausible") {
-//             qualityVariable = "genius";
-//             $($(event.target).siblings('p.quality').children()[0]).text(qualityVariable);
-
-//         } else if (event.target.className === "upvote" && currentQuality === "swill") {
-//             qualityVariable = "plausible";
-//             $($(event.target).siblings('p.quality').children()[0]).text(qualityVariable);
-
-//         } else if (event.target.className === "downvote" && currentQuality === "plausible") {
-//             qualityVariable = "swill"
-//             $($(event.target).siblings('p.quality').children()[0]).text(qualityVariable);
-
-//         } else if (event.target.className === "downvote" && currentQuality === "genius") {
-//             qualityVariable = "plausible"
-//             $($(event.target).siblings('p.quality').children()[0]).text(qualityVariable);
-
-//         } else if (event.target.className === "downvote" && currentQuality === "swill") {
-//             qualityVariable = "swill";
-
-//         } else if (event.target.className === "upvote" && currentQuality === "genius") {
-//             qualityVariable = "genius";
-//         }
-
-// var cardObjectInJSON = localStorage.getItem(cardHTMLId);
-// var cardObjectInJS = JSON.parse(cardObjectInJSON);
-
-// cardObjectInJS.quality = qualityVariable;
-
-// var newCardJSON = JSON.stringify(cardObjectInJS);
-// localStorage.setItem(cardHTMLId, newCardJSON);
-//     }
-
-// });
-
-// ===================================================================
-// GRAVEYARD
-// ===================================================================
-
-// function displayLocalStorage() {
-//     for (var i = 0; i < localStorage.length; i++){
-//         var key = localStorage.key(i);
-//         var localStorageItem = JSON.parse(localStorage.getItem(key));
-//         $(".bottom-box").prepend(newCardHTML(localStorageItem));
-//     }
-// }
-
-// function localStoreCard(todoObject) {
-//     var cardString = JSON.stringify(todoObject);
-//     localStorage.setItem('card', cardString);
-// }
-
-// function cardObject() {
-//     return {
-//         title: $('#title-input').val(),
-//         body: $('#body-input').val(),
-//         quality: qualityVariable
-//     };
-// }
-
-// $.each(localStorage, function (key) {
-//     var cardData = JSON.parse(this);
-//     numCards++;
-//     $(".bottom-box").prepend(newCardHTML(key, cardData.title, cardData.body, cardData.quality));
-// });
