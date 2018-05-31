@@ -1,14 +1,7 @@
 $(document).ready(function() {
-  // ===================================================================
-  // VARIABLES
-  // ===================================================================
-
   renderObjects(Object.keys(localStorage), 10);
   displayShowMore();
 
-  // ===================================================================
-  // EVENT LISTENERS
-  // ===================================================================
   $('#todo-form').submit(addObject);
   $('#title-input').on('keyup', buttonDisabled);
   $('#body-input').on('keyup', buttonDisabled);
@@ -46,9 +39,6 @@ $(document).ready(function() {
   });
   $('.bottom-box').on('keydown', characterCount);
 
-  // ===================================================================
-  // FUNCTIONS
-  // ===================================================================
   function addObject(e) {
     event.preventDefault();
     if ($('#title-input').val() === '') {
@@ -71,7 +61,6 @@ $(document).ready(function() {
       completed: false,
       exempt: false
     };
-    // $('.bottom-box').prepend(newCardHTML(object));
     localStorage.setItem(object.id, JSON.stringify(object));
     renderObjects(Object.keys(localStorage), 10);
     displayShowMore();
