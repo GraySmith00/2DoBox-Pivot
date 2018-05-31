@@ -127,7 +127,7 @@ $(document).ready(function() {
         }</span></p>
         <p class="character-count">Character Count: ${
           todoObject.body.length
-        }</p>
+        } /120</p>
         <button id="completed-button" class="completed-button">Completed</button>
         <hr>
       </div>`;
@@ -266,7 +266,9 @@ $(document).ready(function() {
   function characterCount(e) {
     if (e.target.className === 'body-of-card') {
       var numCharacters = $(e.target).text().length;
-      $(e.target).siblings()[5].innerText = `Character Count: ${numCharacters}`;
+      $(
+        e.target
+      ).siblings()[5].innerText = `Character Count: ${numCharacters} /120`;
       if (numCharacters === 120 && event.keyCode != 8) {
         event.preventDefault();
         $(e.target)
