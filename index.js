@@ -26,6 +26,9 @@ $(document).ready(function() {
   $('.bottom-box').on('click', completed);
   $('#show-completed').on('click', showCompleted);
   $('#show-more').on('click', showMore);
+  $('.all').on('click', function() {
+    renderObjects(Object.keys(localStorage), 10);
+  });
   $('.none').on('click', function() {
     showImportance('None');
   });

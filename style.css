@@ -109,7 +109,7 @@ button {
 
 .save-btn:disabled,
 .save-btn:disabled:hover {
-  background-color: rgb(189, 219, 216);
+  background-color: rgb(220, 228, 227);
 }
 
 .save-btn:hover {
@@ -242,7 +242,7 @@ p {
 }
 
 .show-more {
-  margin: 0 auto 4rem auto;
+  margin: 2rem auto 4rem auto;
   width: 50%;
 }
 
